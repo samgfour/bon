@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boonifyme - Budget Women's Fashion Reviews</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #fafafa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        header {
+            background: white;
+            border-bottom: 1px solid #e0e0e0;
+            padding: 1.5rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #d946a6;
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: #333;
+        }
+
+        nav a {
+            margin-left: 2rem;
+            text-decoration: none;
+            color: #666;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+        }
+
+        nav a:hover {
+            color: #d946a6;
+        }
+
+        /* Hero */
+        .hero {
+            background: linear-gradient(135deg, #d946a6 0%, #ec4899 100%);
+            color: white;
+            padding: 4rem 1.5rem;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .search-box {
+            max-width: 600px;
+            margin: 0 auto;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .search-box input {
+            flex: 1;
+            padding: 1rem;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+
+        .search-box button {
+            padding: 1rem 2rem;
+            background: white;
+            color: #d946a6;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .search-box button:hover {
+            transform: scale(1.05);
+        }
+
+        /* Filters */
+        .filters {
+            max-width: 1200px;
+            margin: 3rem auto 0;
+            padding: 0 1.5rem;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .filter-btn {
+            padding: 0.7rem 1.5rem;
+            border: 2px solid #e0e0e0;
+            background: white;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            border-color: #d946a6;
+            color: #d946a6;
+            font-weight: 600;
+        }
+
+        /* Content */
+        .container {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            margin-bottom: 2rem;
+            font-weight: 700;
+        }
+
+        /* Products Grid */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+        }
+
+        .product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.12);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 220px;
+            background: linear-gradient(135deg, #f0f0f0 0%, #e0e0e0 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            font-weight: 300;
+        }
+
+        .product-info {
+            padding: 1.5rem;
+        }
+
+        .product-category {
+            font-size: 0.8rem;
+            color: #d946a6;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .product-desc {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .price-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .price-range {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #d946a6;
+        }
+
+        .rating {
+            display: flex;
+            gap: 0.3rem;
+            font-size: 1rem;
+        }
+
+        .rating .filled {
+            color: #fbbf24;
+        }
+
+        .rating .empty {
+            color: #e0e0e0;
+        }
+
+        .product-retailers {
+            font-size: 0.85rem;
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        .retailers-list {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-top: 0.5rem;
+        }
+
+        .retailer-tag {
+            background: #f3e8ff;
+            color: #d946a6;
+            padding: 0.3rem 0.8rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .cta-button {
+            width: 100%;
+            padding: 0.9rem;
+            background: linear-gradient(135deg, #d946a6 0%, #ec4899 100%);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, opacity 0.2s;
+        }
+
+        .cta-button:hover {
+            transform: scale(1.02);
+            opacity: 0.9;
+        }
+
+        /* Newsletter */
+        .newsletter {
+            background: #f3e8ff;
+            padding: 3rem 1.5rem;
+            margin: 4rem 0;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .newsletter h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .newsletter p {
+            margin-bottom: 1.5rem;
+            color: #666;
+        }
+
+        .newsletter-form {
+            max-width: 500px;
+            margin: 0 auto;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .newsletter-form input {
+            flex: 1;
+            padding: 1rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+
+        .newsletter-form button {
+            padding: 1rem 2rem;
+            background: #d946a6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .newsletter-form button:hover {
+            background: #be185d;
+        }
+
+        /* Footer */
+        footer {
+            background: #f5f5f5;
+            padding: 3rem 1.5rem;
+            margin-top: 4rem;
+            text-align: center;
+            color: #666;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        footer a {
+            color: #d946a6;
+            text-decoration: none;
+            margin: 0 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            nav {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+
+            .search-box {
+                flex-direction: column;
+            }
+
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .newsletter-form {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <a href="/" class="logo">boonify<span>me</span></a>
+            <nav>
+                <a href="#jeans">Jeans</a>
+                <a href="#basics">Basics</a>
+                <a href="#workwear">Workwear</a>
+                <a href="#dresses">Dresses</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero">
+        <h1>Find Budget Fashion in Minutes, Not Hours</h1>
+        <p>Honest reviews. Price comparisons. Time saved. Your favorite budget-friendly women's fashion pieces, curated by someone who actually shops like you.</p>
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Search: jeans, workwear, casual dresses...">
+            <button onclick="search()">Search</button>
+        </div>
+    </section>
+
+    <!-- Filters -->
+    <div class="filters">
+        <button class="filter-btn active" onclick="filterCategory('all')">All</button>
+        <button class="filter-btn" onclick="filterCategory('jeans')">Jeans</button>
+        <button class="filter-btn" onclick="filterCategory('basics')">Basics & Tees</button>
+        <button class="filter-btn" onclick="filterCategory('workwear')">Workwear</button>
+        <button class="filter-btn" onclick="filterCategory('dresses')">Dresses</button>
+    </div>
+
+    <!-- Featured Reviews -->
+    <div class="container">
+        <h2 class="section-title">Trending This Week</h2>
+        <div id="productsGrid" class="products-grid"></div>
+    </div>
+
+    <!-- Newsletter -->
+    <div class="container">
+        <div class="newsletter">
+            <h2>Get Budget Fashion Tips Weekly</h2>
+            <p>New reviews, price drops, and shopping hacks delivered to your inbox. No spam, just savings.</p>
+            <div class="newsletter-form">
+                <input type="email" id="emailInput" placeholder="Your email">
+                <button onclick="subscribeNewsletter()">Subscribe</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 Boonifyme. Budget fashion, honestly reviewed.</p>
+        <div>
+            <a href="#">About</a>
+            <a href="#">Contact</a>
+            <a href="#">Privacy</a>
+            <a href="#">Disclosure</a>
+        </div>
+    </footer>
+
+    <script>
+        // Sample product data
+        const products = [
+            {
+                id: 1,
+                name: "Straight-Leg Jeans",
+                category: "jeans",
+                description: "Timeless fit, zero hassle. Perfect everyday jeans under $50.",
+                price: "$35-45",
+                rating: 4.8,
+                retailers: ["Amazon", "Target", "H&M"],
+                emoji: "👖"
+            },
+            {
+                id: 2,
+                name: "Oversized White T-Shirt",
+                category: "basics",
+                description: "The basics done right. Cotton, soft, and worth the closet space.",
+                price: "$12-18",
+                rating: 4.9,
+                retailers: ["Uniqlo", "H&M", "Amazon"],
+                emoji: "👕"
+            },
+            {
+                id: 3,
+                name: "Tailored Blazer",
+                category: "workwear",
+                description: "Structured, professional, and under $80. Instant polish.",
+                price: "$60-80",
+                rating: 4.7,
+                retailers: ["H&M", "Shein", "ASOS"],
+                emoji: "🧥"
+            },
+            {
+                id: 4,
+                name: "Black Maxi Dress",
+                category: "dresses",
+                description: "Casual or dressy. This one does it all. Wrinkle-resistant too.",
+                price: "$25-35",
+                rating: 4.6,
+                retailers: ["Amazon", "Shein", "Target"],
+                emoji: "👗"
+            },
+            {
+                id: 5,
+                name: "Skinny Jeans (High Waist)",
+                category: "jeans",
+                description: "Form-fitting, flattering, affordable. The closet essential.",
+                price: "$28-40",
+                rating: 4.8,
+                retailers: ["H&M", "Uniqlo", "Shein"],
+                emoji: "👖"
+            },
+            {
+                id: 6,
+                name: "Fitted Blouse",
+                category: "basics",
+                description: "Office-ready.
+
