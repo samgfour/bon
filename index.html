@@ -1,498 +1,134 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Boonifyme - Budget Women's Fashion Reviews</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: #fafafa;
-            color: #333;
-            line-height: 1.6;
-        }
-
-        /* Header */
-        header {
-            background: white;
-            border-bottom: 1px solid #e0e0e0;
-            padding: 1.5rem 0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .header-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 1.5rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: #d946a6;
-            text-decoration: none;
-        }
-
-        .logo span {
-            color: #333;
-        }
-
-        nav a {
-            margin-left: 2rem;
-            text-decoration: none;
-            color: #666;
-            font-size: 0.95rem;
-            transition: color 0.2s;
-        }
-
-        nav a:hover {
-            color: #d946a6;
-        }
-
-        /* Hero */
-        .hero {
-            background: linear-gradient(135deg, #d946a6 0%, #ec4899 100%);
-            color: white;
-            padding: 4rem 1.5rem;
-            text-align: center;
-        }
-
-        .hero h1 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            font-weight: 700;
-        }
-
-        .hero p {
-            font-size: 1.2rem;
-            margin-bottom: 2rem;
-            opacity: 0.95;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .search-box {
-            max-width: 600px;
-            margin: 0 auto;
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .search-box input {
-            flex: 1;
-            padding: 1rem;
-            border: none;
-            border-radius: 6px;
-            font-size: 1rem;
-        }
-
-        .search-box button {
-            padding: 1rem 2rem;
-            background: white;
-            color: #d946a6;
-            border: none;
-            border-radius: 6px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-
-        .search-box button:hover {
-            transform: scale(1.05);
-        }
-
-        /* Filters */
-        .filters {
-            max-width: 1200px;
-            margin: 3rem auto 0;
-            padding: 0 1.5rem;
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .filter-btn {
-            padding: 0.7rem 1.5rem;
-            border: 2px solid #e0e0e0;
-            background: white;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 0.95rem;
-            transition: all 0.2s;
-        }
-
-        .filter-btn:hover,
-        .filter-btn.active {
-            border-color: #d946a6;
-            color: #d946a6;
-            font-weight: 600;
-        }
-
-        /* Content */
-        .container {
-            max-width: 1200px;
-            margin: 3rem auto;
-            padding: 0 1.5rem;
-        }
-
-        .section-title {
-            font-size: 1.8rem;
-            margin-bottom: 2rem;
-            font-weight: 700;
-        }
-
-        /* Products Grid */
-        .products-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 2rem;
-            margin-bottom: 4rem;
-        }
-
-        .product-card {
-            background: white;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-            transition: transform 0.2s, box-shadow 0.2s;
-            cursor: pointer;
-        }
-
-        .product-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 16px rgba(0,0,0,0.12);
-        }
-
-        .product-image {
-            width: 100%;
-            height: 220px;
-            background: linear-gradient(135deg, #f0f0f0 0%, #e0e0e0 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3rem;
-            font-weight: 300;
-        }
-
-        .product-info {
-            padding: 1.5rem;
-        }
-
-        .product-category {
-            font-size: 0.8rem;
-            color: #d946a6;
-            font-weight: 600;
-            text-transform: uppercase;
-            margin-bottom: 0.5rem;
-        }
-
-        .product-name {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: #333;
-        }
-
-        .product-desc {
-            font-size: 0.9rem;
-            color: #666;
-            margin-bottom: 1rem;
-            line-height: 1.5;
-        }
-
-        .price-section {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid #f0f0f0;
-        }
-
-        .price-range {
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: #d946a6;
-        }
-
-        .rating {
-            display: flex;
-            gap: 0.3rem;
-            font-size: 1rem;
-        }
-
-        .rating .filled {
-            color: #fbbf24;
-        }
-
-        .rating .empty {
-            color: #e0e0e0;
-        }
-
-        .product-retailers {
-            font-size: 0.85rem;
-            color: #666;
-            margin-bottom: 1rem;
-        }
-
-        .retailers-list {
-            display: flex;
-            gap: 0.5rem;
-            flex-wrap: wrap;
-            margin-top: 0.5rem;
-        }
-
-        .retailer-tag {
-            background: #f3e8ff;
-            color: #d946a6;
-            padding: 0.3rem 0.8rem;
-            border-radius: 4px;
-            font-size: 0.8rem;
-            font-weight: 500;
-        }
-
-        .cta-button {
-            width: 100%;
-            padding: 0.9rem;
-            background: linear-gradient(135deg, #d946a6 0%, #ec4899 100%);
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s, opacity 0.2s;
-        }
-
-        .cta-button:hover {
-            transform: scale(1.02);
-            opacity: 0.9;
-        }
-
-        /* Newsletter */
-        .newsletter {
-            background: #f3e8ff;
-            padding: 3rem 1.5rem;
-            margin: 4rem 0;
-            border-radius: 8px;
-            text-align: center;
-        }
-
-        .newsletter h2 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            color: #333;
-        }
-
-        .newsletter p {
-            margin-bottom: 1.5rem;
-            color: #666;
-        }
-
-        .newsletter-form {
-            max-width: 500px;
-            margin: 0 auto;
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .newsletter-form input {
-            flex: 1;
-            padding: 1rem;
-            border: 1px solid #e0e0e0;
-            border-radius: 6px;
-            font-size: 1rem;
-        }
-
-        .newsletter-form button {
-            padding: 1rem 2rem;
-            background: #d946a6;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        .newsletter-form button:hover {
-            background: #be185d;
-        }
-
-        /* Footer */
-        footer {
-            background: #f5f5f5;
-            padding: 3rem 1.5rem;
-            margin-top: 4rem;
-            text-align: center;
-            color: #666;
-            border-top: 1px solid #e0e0e0;
-        }
-
-        footer a {
-            color: #d946a6;
-            text-decoration: none;
-            margin: 0 1rem;
-        }
-
-        @media (max-width: 768px) {
-            .header-container {
-                flex-direction: column;
-                gap: 1rem;
-            }
-
-            nav {
-                display: none;
-            }
-
-            .hero h1 {
-                font-size: 1.8rem;
-            }
-
-            .search-box {
-                flex-direction: column;
-            }
-
-            .products-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .newsletter-form {
-                flex-direction: column;
-            }
-        }
-    </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>BoonifyMe: budget fashion, compared</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Instrument+Sans:wght@400;500;600&display=swap">
+<style>
+:root{--bg:#f7f4fa;--card:#fff;--ink:#231a33;--mute:#6b6279;--line:#e3dcec;--pink:#104e4a;--pinkink:#fff;--sage:#dfeadd;--sageink:#24432b;--best:#fdf0c9;
+--c-jeans:#c9d6f2;--c-basics:#f6d9c9;--c-workwear:#d5cfe8;--c-dresses:#f3c9d9;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#17121f;--card:#221a2e;--ink:#f3eef9;--mute:#a99db9;--line:#3a2f4a;--best:#4a3a10;--pink:#5cc4b5;--pinkink:#0b2523;--sage:#27402c;--sageink:#d6ecd9;--c-jeans:#2f3a63;--c-basics:#5a3a2c;--c-workwear:#3d3560;--c-dresses:#5d2a41}}
+:root[data-theme="dark"]{--bg:#17121f;--card:#221a2e;--ink:#f3eef9;--mute:#a99db9;--line:#3a2f4a;--best:#4a3a10;--pink:#5cc4b5;--pinkink:#0b2523;--sage:#27402c;--sageink:#d6ecd9;--c-jeans:#2f3a63;--c-basics:#5a3a2c;--c-workwear:#3d3560;--c-dresses:#5d2a41}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.5 "Instrument Sans",system-ui,sans-serif}
+h1,h2,h3,.logo{font-family:"Bricolage Grotesque","Trebuchet MS",system-ui,sans-serif;margin:0;letter-spacing:-.02em}
+button,input,select,textarea{font:inherit;color:inherit}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--pink);outline-offset:2px}
+.wrap{max-width:1080px;margin:0 auto;padding:0 18px}
+header{display:flex;align-items:center;justify-content:space-between;padding:16px 0;gap:12px;flex-wrap:wrap}
+.logo{font-weight:800;font-size:1.5rem}.logo b{color:var(--pink)}
+nav{display:flex;gap:4px;background:var(--card);border:1px solid var(--line);border-radius:99px;padding:4px}
+nav button{border:0;background:none;padding:7px 16px;border-radius:99px;cursor:pointer;font-weight:600;color:var(--mute)}
+nav button[aria-pressed=true]{background:var(--ink);color:var(--bg)}
+.hero{padding:34px 0 22px}
+.hero h1{font-size:clamp(2.2rem,8vw,4.4rem);font-weight:800;line-height:1.02}
+.hero h1 .amt{display:inline-block;background:var(--pink);color:var(--pinkink);padding:0 .22em;border-radius:.18em;transform:rotate(-2deg);min-width:2.2ch;text-align:center}
+.hero p{max-width:52ch;color:var(--mute);margin:14px 0 18px}
+input[type=range]{width:100%;max-width:520px;accent-color:var(--pink);height:32px}
+.ticks{display:flex;justify-content:space-between;max-width:520px;color:var(--mute);font-size:.85rem}
+.bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:22px 0 16px}
+.chip{border:1px solid var(--line);background:var(--card);border-radius:99px;padding:6px 14px;cursor:pointer;font-weight:500}
+.chip[aria-pressed=true]{background:var(--sage);border-color:transparent;color:var(--sageink);font-weight:600}
+.bar .sp{flex:1}
+.bar input,.bar select{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:7px 10px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px;padding-bottom:30px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden;display:flex;flex-direction:column}
+.card:nth-child(3n+2){border-radius:18px 18px 40px 18px}
+.sw{height:112px;padding:12px;display:flex;justify-content:space-between;align-items:flex-start;font-family:"Bricolage Grotesque",system-ui,sans-serif;font-weight:700;font-size:1.05rem}
+.sw span:last-child{background:var(--card);border-radius:99px;padding:2px 10px;font-size:.85rem;font-family:"Instrument Sans",system-ui,sans-serif}
+.cb{padding:14px;display:flex;flex-direction:column;gap:8px;flex:1}
+.cb h3{font-size:1.08rem;font-weight:700;line-height:1.2}
+.verdict{margin:0;color:var(--ink)}
+.size{margin:0;font-size:.9rem;color:var(--mute)}
+.offers{margin-top:auto;display:grid;gap:6px;padding-top:6px}
+.offer{display:flex;justify-content:space-between;align-items:center;gap:8px;text-decoration:none;border:1px solid var(--line);border-radius:10px;padding:7px 10px;font-size:.92rem}
+.offer:hover{border-color:var(--pink)}
+.offer.best{background:var(--best);border-color:transparent;font-weight:600}
+.offer em{font-style:normal;font-size:.75rem;background:var(--pink);color:var(--pinkink);border-radius:99px;padding:1px 8px;margin-left:6px}
+.empty{padding:40px 0;text-align:center;color:var(--mute)}
+.note{background:var(--sage);color:var(--sageink);border-radius:12px;padding:10px 14px;font-size:.9rem;margin-bottom:16px}
+footer{border-top:1px solid var(--line);padding:20px 0 30px;color:var(--mute);font-size:.88rem}
+.tools{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
+.btn{border:0;background:var(--pink);color:var(--pinkink);border-radius:10px;padding:9px 16px;font-weight:600;cursor:pointer}
+.btn.alt{background:var(--card);color:var(--ink);border:1px solid var(--line)}
+.btn.sm{padding:5px 11px;font-size:.88rem}
+.tbl{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:14px}
+table{border-collapse:collapse;width:100%;min-width:640px}
+th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--line);font-size:.93rem;vertical-align:top}
+th{color:var(--mute);font-weight:500}
+tr:last-child td{border-bottom:0}
+dialog{border:1px solid var(--line);border-radius:18px;background:var(--card);color:var(--ink);width:min(520px,94vw);padding:20px}
+dialog::backdrop{background:rgba(20,10,30,.5)}
+label{display:block;font-weight:600;font-size:.9rem;margin:12px 0 4px}
+label small{font-weight:400;color:var(--mute)}
+dialog input,dialog select,dialog textarea{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:8px 10px}
+.row{display:flex;gap:8px;justify-content:flex-end;margin-top:18px}
+.sw{position:relative;height:170px;overflow:hidden}.sw img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.sw span,.sw span:last-child{position:relative;background:var(--card);border-radius:99px;padding:2px 10px;font-size:.85rem;font-family:"Instrument Sans",system-ui,sans-serif}
+.pg{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;padding:0 0 28px}.pg button:disabled{opacity:.4;cursor:default}
+.clk{display:flex;gap:10px;align-items:center;flex-wrap:wrap;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:8px 14px;font-size:.92rem}
+.clk select{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:4px 8px}
+.cfg{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:2px 14px;margin:12px 0 24px}
+.cfg input,#team td input{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:7px 10px;width:100%}
+#team .tools input{width:auto}#msg{margin:10px 0 0}
+[hidden]{display:none!important}
+.logo{display:flex;align-items:center;gap:9px;text-decoration:none}.mk{width:32px;height:32px;flex:none}
+</style>
 </head>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="config.js"></script>
 <body>
-    <!-- Header -->
-    <header>
-        <div class="header-container">
-            <a href="/" class="logo">boonify<span>me</span></a>
-            <nav>
-                <a href="#jeans">Jeans</a>
-                <a href="#basics">Basics</a>
-                <a href="#workwear">Workwear</a>
-                <a href="#dresses">Dresses</a>
-            </nav>
-        </div>
-    </header>
-
-    <!-- Hero -->
-    <section class="hero">
-        <h1>Find Budget Fashion in Minutes, Not Hours</h1>
-        <p>Honest reviews. Price comparisons. Time saved. Your favorite budget-friendly women's fashion pieces, curated by someone who actually shops like you.</p>
-        <div class="search-box">
-            <input type="text" id="searchInput" placeholder="Search: jeans, workwear, casual dresses...">
-            <button onclick="search()">Search</button>
-        </div>
-    </section>
-
-    <!-- Filters -->
-    <div class="filters">
-        <button class="filter-btn active" onclick="filterCategory('all')">All</button>
-        <button class="filter-btn" onclick="filterCategory('jeans')">Jeans</button>
-        <button class="filter-btn" onclick="filterCategory('basics')">Basics & Tees</button>
-        <button class="filter-btn" onclick="filterCategory('workwear')">Workwear</button>
-        <button class="filter-btn" onclick="filterCategory('dresses')">Dresses</button>
-    </div>
-
-    <!-- Featured Reviews -->
-    <div class="container">
-        <h2 class="section-title">Trending This Week</h2>
-        <div id="productsGrid" class="products-grid"></div>
-    </div>
-
-    <!-- Newsletter -->
-    <div class="container">
-        <div class="newsletter">
-            <h2>Get Budget Fashion Tips Weekly</h2>
-            <p>New reviews, price drops, and shopping hacks delivered to your inbox. No spam, just savings.</p>
-            <div class="newsletter-form">
-                <input type="email" id="emailInput" placeholder="Your email">
-                <button onclick="subscribeNewsletter()">Subscribe</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Footer -->
-    <footer>
-        <p>&copy; 2026 Boonifyme. Budget fashion, honestly reviewed.</p>
-        <div>
-            <a href="#">About</a>
-            <a href="#">Contact</a>
-            <a href="#">Privacy</a>
-            <a href="#">Disclosure</a>
-        </div>
-    </footer>
-
-    <script>
-        // Sample product data
-        const products = [
-            {
-                id: 1,
-                name: "Straight-Leg Jeans",
-                category: "jeans",
-                description: "Timeless fit, zero hassle. Perfect everyday jeans under $50.",
-                price: "$35-45",
-                rating: 4.8,
-                retailers: ["Amazon", "Target", "H&M"],
-                emoji: "👖"
-            },
-            {
-                id: 2,
-                name: "Oversized White T-Shirt",
-                category: "basics",
-                description: "The basics done right. Cotton, soft, and worth the closet space.",
-                price: "$12-18",
-                rating: 4.9,
-                retailers: ["Uniqlo", "H&M", "Amazon"],
-                emoji: "👕"
-            },
-            {
-                id: 3,
-                name: "Tailored Blazer",
-                category: "workwear",
-                description: "Structured, professional, and under $80. Instant polish.",
-                price: "$60-80",
-                rating: 4.7,
-                retailers: ["H&M", "Shein", "ASOS"],
-                emoji: "🧥"
-            },
-            {
-                id: 4,
-                name: "Black Maxi Dress",
-                category: "dresses",
-                description: "Casual or dressy. This one does it all. Wrinkle-resistant too.",
-                price: "$25-35",
-                rating: 4.6,
-                retailers: ["Amazon", "Shein", "Target"],
-                emoji: "👗"
-            },
-            {
-                id: 5,
-                name: "Skinny Jeans (High Waist)",
-                category: "jeans",
-                description: "Form-fitting, flattering, affordable. The closet essential.",
-                price: "$28-40",
-                rating: 4.8,
-                retailers: ["H&M", "Uniqlo", "Shein"],
-                emoji: "👖"
-            },
-            {
-                id: 6,
-                name: "Fitted Blouse",
-                category: "basics",
-                description: "Office-ready.
-
+<div class="wrap">
+<header><a class="logo" href="./" aria-label="BoonifyMe home"><svg class="mk" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="#104e4a"/><path d="M9 13h14l-1 10a2 2 0 0 1-2 1.8h-8A2 2 0 0 1 10 23z" fill="#f9faf9"/><path d="M12.5 13v-1.5a3.5 3.5 0 0 1 7 0V13" fill="none" stroke="#f9faf9" stroke-width="1.6" stroke-linecap="round"/><circle cx="16" cy="18.5" r="2.4" fill="#ffc233"/></svg><span class="logo">Boonify<b>Me</b></span></a></header>
+<main>
+<section class="hero">
+    <h1>Good clothes under <span class="amt" id="amt">$50</span></h1>
+    <p>We compare prices across stores and tell you how each piece actually fits, so you don't spend an evening on ten tabs.</p>
+    <label for="max" style="margin:0 0 2px">Your budget per item</label>
+    <input type="range" id="max" min="20" max="100" step="5" value="50">
+    <div class="ticks"><span>$20</span><span>$100</span></div>
+  </section>
+    <div class="bar">
+    <div id="cats" role="group" aria-label="Category" style="display:flex;gap:8px;flex-wrap:wrap"></div>
+    <span class="sp"></span>
+    <input id="q" type="search" placeholder="Search products" aria-label="Search products">
+    <select id="rf" aria-label="Retailer"></select>
+    <select id="so" aria-label="Sort"><option value="low">Lowest price</option><option value="rate">Top rated</option></select><select id="ps" aria-label="Per page"><option value="8">8 per page</option><option value="12">12 per page</option><option value="24">24 per page</option></select>
+  </div>
+  <div class="grid" id="grid"></div><div class="pg" id="pgS"></div>
+</main>
+<footer>Affiliate disclosure: we earn a commission when you buy through our links, at no extra cost to you. Prices change often, so confirm at the store before you buy.</footer>
+</div>
+<script>
+var SB_URL=(window.BOONIFYME_CONFIG||{}).supabaseUrl,SB_KEY=(window.BOONIFYME_CONFIG||{}).supabaseAnonKey;var sb=supabase.createClient(SB_URL,SB_KEY),P=[];
+var CATS=["Jeans","Basics","Workwear","Dresses"],S={cat:"All",q:"",rf:"All",so:"low",max:50,pg:1,ps:8};
+function $(i){return document.getElementById(i)}
+function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+function money(n){return"$"+(Math.round(n*100)/100).toFixed(2).replace(/\.00$/,"")}
+function low(p){return Math.min.apply(null,p.offers.map(function(o){return o.p}))}
+function safeUrl(u){return/^https?:\/\//.test(u)?u:"#"}
+var ART={Jeans:'<path d="M30 15h40l4 70H54l-4-40-4 40H26z"/>',Basics:'<path d="M35 15l-22 14 8 14 9-6v44h40V37l9 6 8-14-22-14q-5 9-15 9t-15-9z"/>',Workwear:'<path d="M32 12l18 14 18-14 20 16-8 16-8-4v42H28V40l-8 4-8-16z"/>',Dresses:'<path d="M40 10h20l3 22 14 58H23l14-58z"/>'},BG={Jeans:"#c9d6f2",Basics:"#f6d9c9",Workwear:"#d5cfe8",Dresses:"#f3c9d9"};
+function src(p){if(p.img!=="art")return p.img;return"data:image/svg+xml,"+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="'+(BG[p.cat]||"#ddd")+'"/><g fill="#231a33" opacity=".78">'+(ART[p.cat]||ART.Basics)+'</g></svg>')}
+function chips(){$("cats").innerHTML=["All"].concat(CATS).map(function(c){return'<button class="chip" data-c="'+c+'" aria-pressed="'+(S.cat===c)+'">'+c+"</button>"}).join("")}
+function stSel(){var m={};P.forEach(function(p){p.offers.forEach(function(o){m[o.r]=1})});$("rf").innerHTML='<option value="All">All stores</option>'+Object.keys(m).sort().map(function(x){return"<option>"+esc(x)+"</option>"}).join("")}
+function card(p){var b=low(p),o=p.offers.slice().sort(function(x,y){return x.p-y.p}).map(function(x){return'<a class="offer'+(x.p===b?" best":"")+'" href="'+esc(safeUrl(x.u))+'" target="_blank" rel="sponsored noopener"><span>'+esc(x.r)+(x.p===b?"<em>lowest</em>":"")+"</span><span>"+money(x.p)+"</span></a>"}).join("");
+return'<article class="card"><div class="sw"><img src="'+esc(src(p))+'" alt="'+esc(p.name)+'" loading="lazy"><span>'+esc(p.cat)+"</span><span>"+Number(p.rating).toFixed(1)+' / 5</span></div><div class="cb"><h3>'+esc(p.name)+'</h3><p class="verdict">'+esc(p.verdict)+'</p><p class="size">Fit: '+esc(p.sizing)+'</p><div class="offers">'+o+"</div></div></article>"}
+function pager(n,pg){var el=$("pgS");if(n<2){el.innerHTML="";return}var h='<button class="btn alt sm" data-g="'+(pg-1)+'"'+(pg<2?" disabled":"")+">Prev</button>";for(var i=1;i<=n;i++)h+='<button class="chip" data-g="'+i+'" aria-pressed="'+(i===pg)+'">'+i+"</button>";el.innerHTML=h+'<button class="btn alt sm" data-g="'+(pg+1)+'"'+(pg>=n?" disabled":"")+">Next</button>"}
+function shop(){var q=S.q.toLowerCase(),L=P.filter(function(p){return low(p)<=S.max&&(S.cat==="All"||p.cat===S.cat)&&(S.rf==="All"||p.offers.some(function(o){return o.r===S.rf}))&&(!q||(p.name+p.verdict).toLowerCase().indexOf(q)>-1)}).sort(function(a,b){return S.so==="low"?low(a)-low(b):b.rating-a.rating});
+var n=Math.max(1,Math.ceil(L.length/S.ps));S.pg=Math.min(S.pg,n);
+if(!L.length){$("grid").innerHTML='<div class="empty" style="grid-column:1/-1">Nothing under '+money(S.max)+' matches. Raise your budget or clear the filters.</div>';$("pgS").innerHTML="";return}
+$("grid").innerHTML=L.slice((S.pg-1)*S.ps,S.pg*S.ps).map(card).join("");pager(n,S.pg)}
+function go(k,v){S[k]=v;S.pg=1;shop()}
+$("max").oninput=function(){$("amt").textContent="$"+this.value;go("max",+this.value)};
+$("cats").onclick=function(e){var c=e.target.getAttribute("data-c");if(c){S.cat=c;chips();go("cat",c)}};
+$("q").oninput=function(){go("q",this.value)};$("rf").onchange=function(){go("rf",this.value)};$("so").onchange=function(){go("so",this.value)};$("ps").onchange=function(){go("ps",+this.value)};
+$("pgS").onclick=function(e){var g=+e.target.getAttribute("data-g");if(g){S.pg=g;shop();$("grid").scrollIntoView()}};
+chips();shop();
+sb.from("products").select("*").eq("live",true).then(function(r){P=r.data||[];stSel();shop()});
+</script>
+</body>
+</html>
