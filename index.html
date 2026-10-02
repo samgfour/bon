@@ -3,7 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>BoonifyMe: budget fashion, compared</title>
+<title>BoonifyMe Team</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="config.js"></script>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Instrument+Sans:wght@400;500;600&display=swap">
 <style>
 :root{--bg:#f7f4fa;--card:#fff;--ink:#231a33;--mute:#6b6279;--line:#e3dcec;--pink:#104e4a;--pinkink:#fff;--sage:#dfeadd;--sageink:#24432b;--best:#fdf0c9;
@@ -77,58 +79,142 @@ dialog input,dialog select,dialog textarea{width:100%;background:var(--bg);borde
 #team .tools input{width:auto}#msg{margin:10px 0 0}
 [hidden]{display:none!important}
 .logo{display:flex;align-items:center;gap:9px;text-decoration:none}.mk{width:32px;height:32px;flex:none}
+#vt input,#vt select,.tools input,.tools select{background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:8px 10px}
 </style>
 </head>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
-<script src="config.js"></script>
 <body>
 <div class="wrap">
-<header><a class="logo" href="./" aria-label="BoonifyMe home"><svg class="mk" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="#104e4a"/><path d="M9 13h14l-1 10a2 2 0 0 1-2 1.8h-8A2 2 0 0 1 10 23z" fill="#f9faf9"/><path d="M12.5 13v-1.5a3.5 3.5 0 0 1 7 0V13" fill="none" stroke="#f9faf9" stroke-width="1.6" stroke-linecap="round"/><circle cx="16" cy="18.5" r="2.4" fill="#ffc233"/></svg><span class="logo">Boonify<b>Me</b></span></a></header>
-<main>
-<section class="hero">
-    <h1>Good clothes under <span class="amt" id="amt">$50</span></h1>
-    <p>We compare prices across stores and tell you how each piece actually fits, so you don't spend an evening on ten tabs.</p>
-    <label for="max" style="margin:0 0 2px">Your budget per item</label>
-    <input type="range" id="max" min="20" max="100" step="5" value="50">
-    <div class="ticks"><span>$20</span><span>$100</span></div>
-  </section>
-    <div class="bar">
-    <div id="cats" role="group" aria-label="Category" style="display:flex;gap:8px;flex-wrap:wrap"></div>
-    <span class="sp"></span>
-    <input id="q" type="search" placeholder="Search products" aria-label="Search products">
-    <select id="rf" aria-label="Retailer"></select>
-    <select id="so" aria-label="Sort"><option value="low">Lowest price</option><option value="rate">Top rated</option></select><select id="ps" aria-label="Per page"><option value="8">8 per page</option><option value="12">12 per page</option><option value="24">24 per page</option></select>
-  </div>
-  <div class="grid" id="grid"></div><div class="pg" id="pgS"></div>
+<section id="login" hidden style="max-width:380px;margin:10vh auto 0">
+  <span class="logo"><svg class="mk" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="#104e4a"/><path d="M9 13h14l-1 10a2 2 0 0 1-2 1.8h-8A2 2 0 0 1 10 23z" fill="#f9faf9"/><path d="M12.5 13v-1.5a3.5 3.5 0 0 1 7 0V13" fill="none" stroke="#f9faf9" stroke-width="1.6" stroke-linecap="round"/><circle cx="16" cy="18.5" r="2.4" fill="#ffc233"/></svg><span>Boonify<b>Me</b></span></span>
+  <h1 style="font-size:2rem;margin:18px 0 4px">Team sign in</h1>
+  <p class="size">Accounts are created by the admin. There is no public sign up.</p>
+  <label for="em">Email</label><input id="em" type="email" autocomplete="username" style="width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:10px;background:var(--card)">
+  <label for="pw">Password</label><input id="pw" type="password" autocomplete="current-password" style="width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:10px;background:var(--card)">
+  <div class="note" id="lerr" hidden style="margin-top:12px"></div>
+  <div class="row" style="justify-content:flex-start"><button class="btn" id="go">Sign in</button></div>
+</section>
+<div id="app" hidden>
+<header>
+  <span class="logo"><svg class="mk" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="#104e4a"/><path d="M9 13h14l-1 10a2 2 0 0 1-2 1.8h-8A2 2 0 0 1 10 23z" fill="#f9faf9"/><path d="M12.5 13v-1.5a3.5 3.5 0 0 1 7 0V13" fill="none" stroke="#f9faf9" stroke-width="1.6" stroke-linecap="round"/><circle cx="16" cy="18.5" r="2.4" fill="#ffc233"/></svg><span>Boonify<b>Me</b></span><span class="chip" style="cursor:default;font-size:.8rem;margin-left:4px">Team portal</span></span>
+  <nav aria-label="View"><button id="tP" aria-pressed="true">Products</button><button id="tT" aria-pressed="false">Team pay</button></nav>
+</header>
+<div class="clk"><span id="who"></span><span id="clock"></span><span style="flex:1"></span><button class="btn alt sm" id="pwd">Change password</button><button class="btn alt sm" id="out">Sign out</button></div>
+<div class="note" id="msg" hidden style="margin-top:12px"></div>
+<main id="vp">
+  <div class="tools"><button class="btn" id="add">Add product</button></div>
+  <p class="size">Products go live on the storefront only when they have an image and every link is shortened. Otherwise they stay as drafts.</p>
+  <div class="tbl"><table><thead><tr><th></th><th>Product</th><th>Category</th><th>Offers</th><th>Status</th><th></th></tr></thead><tbody id="rows"></tbody></table></div>
+  <div class="pg" id="pgM" style="padding-top:14px"></div>
 </main>
+<main id="vt" hidden></main>
 <footer>Affiliate disclosure: we earn a commission when you buy through our links, at no extra cost to you. Prices change often, so confirm at the store before you buy.</footer>
-</div>
+</div></div>
+<dialog id="dlg">
+  <h2 id="dt" style="font-size:1.4rem">Add product</h2>
+  <label for="fn">Name</label><input id="fn">
+  <label for="fi">Image <small>(required to go live)</small></label><select id="fi"><option value="art">Illustration</option><option value="up">Upload photo</option><option value="url">Image URL</option></select><input id="ff" type="file" accept="image/*" hidden><input id="fu" placeholder="https://" hidden><img id="fp" alt="Preview" style="width:100%;max-height:150px;object-fit:cover;border-radius:10px;margin-top:8px" hidden>
+  <label for="fc">Category</label><select id="fc"></select>
+  <label for="fr">Rating <small>(1 to 5)</small></label><input id="fr" type="number" min="1" max="5" step="0.1">
+  <label for="fv">Our verdict</label><input id="fv">
+  <label for="fs">Sizing note</label><input id="fs">
+  <label for="fa">Amazon ASIN <small>(needed so sales credit the right people)</small></label><input id="fa" maxlength="10">
+  <label for="fo">Offers <small>(one per line: Store | price | short link)</small></label><textarea id="fo" rows="4"></textarea>
+  <div class="row"><button class="btn alt" id="cx">Cancel</button><button class="btn" id="sv">Save product</button></div>
+</dialog>
 <script>
-var SB_URL=(window.BOONIFYME_CONFIG||{}).supabaseUrl,SB_KEY=(window.BOONIFYME_CONFIG||{}).supabaseAnonKey;var sb=supabase.createClient(SB_URL,SB_KEY),P=[];
-var CATS=["Jeans","Basics","Workwear","Dresses"],S={cat:"All",q:"",rf:"All",so:"low",max:50,pg:1,ps:8};
+var SB_URL=(window.BOONIFYME_CONFIG||{}).supabaseUrl,SB_KEY=(window.BOONIFYME_CONFIG||{}).supabaseAnonKey;
+var sb=supabase.createClient(SB_URL,SB_KEY),me,cfg,P=[],sh,cur="art",editId=null,mpg=1,CATS=["Jeans","Basics","Workwear","Dresses"];
 function $(i){return document.getElementById(i)}
 function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
 function money(n){return"$"+(Math.round(n*100)/100).toFixed(2).replace(/\.00$/,"")}
-function low(p){return Math.min.apply(null,p.offers.map(function(o){return o.p}))}
-function safeUrl(u){return/^https?:\/\//.test(u)?u:"#"}
+function hrs(h){var m=Math.round(h*60);return Math.floor(m/60)+"h "+m%60+"m"}
+function flash(t){var m=$("msg");m.textContent=t;m.hidden=!t;clearTimeout(flash.t);flash.t=setTimeout(function(){m.hidden=true},7000)}
 var ART={Jeans:'<path d="M30 15h40l4 70H54l-4-40-4 40H26z"/>',Basics:'<path d="M35 15l-22 14 8 14 9-6v44h40V37l9 6 8-14-22-14q-5 9-15 9t-15-9z"/>',Workwear:'<path d="M32 12l18 14 18-14 20 16-8 16-8-4v42H28V40l-8 4-8-16z"/>',Dresses:'<path d="M40 10h20l3 22 14 58H23l14-58z"/>'},BG={Jeans:"#c9d6f2",Basics:"#f6d9c9",Workwear:"#d5cfe8",Dresses:"#f3c9d9"};
-function src(p){if(p.img!=="art")return p.img;return"data:image/svg+xml,"+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="'+(BG[p.cat]||"#ddd")+'"/><g fill="#231a33" opacity=".78">'+(ART[p.cat]||ART.Basics)+'</g></svg>')}
-function chips(){$("cats").innerHTML=["All"].concat(CATS).map(function(c){return'<button class="chip" data-c="'+c+'" aria-pressed="'+(S.cat===c)+'">'+c+"</button>"}).join("")}
-function stSel(){var m={};P.forEach(function(p){p.offers.forEach(function(o){m[o.r]=1})});$("rf").innerHTML='<option value="All">All stores</option>'+Object.keys(m).sort().map(function(x){return"<option>"+esc(x)+"</option>"}).join("")}
-function card(p){var b=low(p),o=p.offers.slice().sort(function(x,y){return x.p-y.p}).map(function(x){return'<a class="offer'+(x.p===b?" best":"")+'" href="'+esc(safeUrl(x.u))+'" target="_blank" rel="sponsored noopener"><span>'+esc(x.r)+(x.p===b?"<em>lowest</em>":"")+"</span><span>"+money(x.p)+"</span></a>"}).join("");
-return'<article class="card"><div class="sw"><img src="'+esc(src(p))+'" alt="'+esc(p.name)+'" loading="lazy"><span>'+esc(p.cat)+"</span><span>"+Number(p.rating).toFixed(1)+' / 5</span></div><div class="cb"><h3>'+esc(p.name)+'</h3><p class="verdict">'+esc(p.verdict)+'</p><p class="size">Fit: '+esc(p.sizing)+'</p><div class="offers">'+o+"</div></div></article>"}
-function pager(n,pg){var el=$("pgS");if(n<2){el.innerHTML="";return}var h='<button class="btn alt sm" data-g="'+(pg-1)+'"'+(pg<2?" disabled":"")+">Prev</button>";for(var i=1;i<=n;i++)h+='<button class="chip" data-g="'+i+'" aria-pressed="'+(i===pg)+'">'+i+"</button>";el.innerHTML=h+'<button class="btn alt sm" data-g="'+(pg+1)+'"'+(pg>=n?" disabled":"")+">Next</button>"}
-function shop(){var q=S.q.toLowerCase(),L=P.filter(function(p){return low(p)<=S.max&&(S.cat==="All"||p.cat===S.cat)&&(S.rf==="All"||p.offers.some(function(o){return o.r===S.rf}))&&(!q||(p.name+p.verdict).toLowerCase().indexOf(q)>-1)}).sort(function(a,b){return S.so==="low"?low(a)-low(b):b.rating-a.rating});
-var n=Math.max(1,Math.ceil(L.length/S.ps));S.pg=Math.min(S.pg,n);
-if(!L.length){$("grid").innerHTML='<div class="empty" style="grid-column:1/-1">Nothing under '+money(S.max)+' matches. Raise your budget or clear the filters.</div>';$("pgS").innerHTML="";return}
-$("grid").innerHTML=L.slice((S.pg-1)*S.ps,S.pg*S.ps).map(card).join("");pager(n,S.pg)}
-function go(k,v){S[k]=v;S.pg=1;shop()}
-$("max").oninput=function(){$("amt").textContent="$"+this.value;go("max",+this.value)};
-$("cats").onclick=function(e){var c=e.target.getAttribute("data-c");if(c){S.cat=c;chips();go("cat",c)}};
-$("q").oninput=function(){go("q",this.value)};$("rf").onchange=function(){go("rf",this.value)};$("so").onchange=function(){go("so",this.value)};$("ps").onchange=function(){go("ps",+this.value)};
-$("pgS").onclick=function(e){var g=+e.target.getAttribute("data-g");if(g){S.pg=g;shop();$("grid").scrollIntoView()}};
-chips();shop();
-sb.from("products").select("*").eq("live",true).then(function(r){P=r.data||[];stSel();shop()});
+function art(c){return"data:image/svg+xml,"+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="'+(BG[c]||"#ddd")+'"/><g fill="#231a33" opacity=".78">'+(ART[c]||ART.Basics)+'</g></svg>')}
+function src(p){return p.img==="art"?art(p.cat):p.img}
+function isShort(u){try{var h=new URL(u).hostname.replace(/^www\./,"");return cfg.short.split(",").map(function(x){return x.trim()}).indexOf(h)>-1}catch(e){return false}}
+function issues(p){var r=[];if(!p.img)r.push("Needs an image");(p.offers||[]).forEach(function(o){if(!isShort(o.u))r.push(o.r+" link not shortened")});if(!(p.offers||[]).length)r.push("Needs an offer");return r}
+function pager(id,total,pg,ps,cb){var n=Math.ceil(total/ps),el=$(id);if(n<2){el.innerHTML="";return}var h='<button class="btn alt sm" data-g="'+(pg-1)+'"'+(pg<2?" disabled":"")+">Prev</button>";for(var i=1;i<=n;i++)h+='<button class="chip" data-g="'+i+'" aria-pressed="'+(i===pg)+'">'+i+"</button>";el.innerHTML=h+'<button class="btn alt sm" data-g="'+(pg+1)+'"'+(pg>=n?" disabled":"")+">Next</button>";el.onclick=function(e){var g=+e.target.getAttribute("data-g");if(g)cb(g)}}
+
+/* ---- sign in ---- */
+function showLogin(){$("app").hidden=true;$("login").hidden=false}
+async function signIn(){var r=await sb.auth.signInWithPassword({email:$("em").value.trim(),password:$("pw").value});if(r.error){$("lerr").textContent=r.error.message;$("lerr").hidden=false;return}$("pw").value="";start()}
+$("go").onclick=signIn;$("pw").onkeydown=function(e){if(e.key==="Enter")signIn()};
+$("out").onclick=async function(){await sb.auth.signOut();showLogin()};
+async function start(){
+  var u=(await sb.auth.getUser()).data.user;if(!u){showLogin();return}
+  var a=await sb.from("profiles").select("*").eq("id",u.id).single(),b=await sb.from("settings").select("cfg").eq("id",1).single();
+  if(a.error||b.error){$("lerr").textContent="Could not load your account. Check that schema.sql was run.";$("lerr").hidden=false;showLogin();return}
+  me=a.data;cfg=b.data.cfg;$("login").hidden=true;$("app").hidden=false;
+  $("who").innerHTML="<b>"+esc(me.name)+"</b> ("+me.role+")";
+  await loadP();await loadShift();rows();clock()}
+async function loadP(){var r=await sb.from("products").select("*").order("updated_at",{ascending:false});P=r.data||[]}
+async function loadShift(){var r=await sb.from("shifts").select("*").eq("user_id",me.id).is("clock_out",null).maybeSingle();sh=r.data;if(sh){var c=await sb.from("edits").select("id",{count:"exact",head:true}).eq("shift_id",sh.id);sh.n=c.count||0}}
+
+/* ---- time clock ---- */
+function clock(){var h=sh?'<button class="btn sm" id="ck">Clock out</button> <b>'+sh.n+" of "+cfg.minP+"</b> products this shift, "+hrs((Date.now()-new Date(sh.clock_in))/36e5):'<button class="btn sm" id="ck">Clock in</button> Not on shift';$("clock").innerHTML=h;
+$("ck").onclick=async function(){if(sh){var ok=sh.n>=cfg.minP,r=await sb.from("shifts").update({clock_out:new Date().toISOString(),ok:ok}).eq("id",sh.id);if(r.error)return flash(r.error.message);flash(ok?"Shift saved. Minimum met.":"Shift saved below the "+cfg.minP+"-product minimum, so no bonus for it.")}else{var r2=await sb.from("shifts").insert({}).select().single();if(r2.error)return flash(r2.error.message)}await loadShift();clock()}}
+setInterval(function(){if(me)clock()},60000);
+
+/* ---- products ---- */
+function rows(){var ps=8,pg=Math.min(mpg,Math.max(1,Math.ceil(P.length/ps)));mpg=pg;
+$("rows").innerHTML=P.slice((pg-1)*ps,pg*ps).map(function(p){var is=issues(p);return'<tr><td><img src="'+esc(src(p))+'" alt="" width="44" height="44" style="object-fit:cover;border-radius:8px"></td><td><b>'+esc(p.name)+"</b></td><td>"+esc(p.cat)+"</td><td>"+(p.offers||[]).map(function(o){return esc(o.r)+" "+money(o.p)}).join(", ")+"</td><td>"+(is.length?"Draft: "+esc(is.join("; ")):"Live")+'</td><td style="white-space:nowrap"><button class="btn alt sm" data-e="'+p.id+'">Edit</button>'+(me.role==="admin"?' <button class="btn alt sm" data-d="'+p.id+'">Delete</button>':"")+"</td></tr>"}).join("")||'<tr><td colspan="6" class="empty">No products yet. Add your first one.</td></tr>';
+pager("pgM",P.length,pg,ps,function(g){mpg=g;rows()})}
+$("rows").onclick=async function(e){var ed=e.target.getAttribute("data-e"),de=e.target.getAttribute("data-d");if(ed)openD(ed);if(de&&confirm("Delete this product?")){var r=await sb.from("products").delete().eq("id",de);if(r.error)return flash(r.error.message);await loadP();rows()}};
+function imgUI(){var m=$("fi").value;$("ff").hidden=m!=="up";$("fu").hidden=m!=="url";if(m==="art")cur="art";else if(m==="url")cur=$("fu").value.trim();else if(cur==="art"||cur.indexOf("data:image/jpeg")!==0)cur="";$("fp").src=cur==="art"?art($("fc").value):cur;$("fp").hidden=!cur}
+function openD(id){editId=id;var p=P.filter(function(x){return x.id===id})[0]||{name:"",cat:CATS[0],rating:4,verdict:"",sizing:"",asin:"",offers:[],img:"art"};
+$("dt").textContent=id?"Edit product":"Add product";$("fc").innerHTML=CATS.map(function(c){return"<option"+(c===p.cat?" selected":"")+">"+c+"</option>"}).join("");
+$("fn").value=p.name;$("fr").value=p.rating;$("fv").value=p.verdict||"";$("fs").value=p.sizing||"";$("fa").value=p.asin||"";$("fo").value=(p.offers||[]).map(function(o){return o.r+" | "+o.p+" | "+o.u}).join("\n");
+cur=p.img||"";$("fi").value=cur==="art"?"art":cur.indexOf("data:")===0?"up":"url";$("fu").value=$("fi").value==="url"?cur:"";imgUI();$("dlg").showModal();$("fn").focus()}
+$("add").onclick=function(){openD(null)};$("cx").onclick=function(){$("dlg").close()};
+$("fi").onchange=imgUI;$("fu").oninput=imgUI;$("fc").onchange=imgUI;
+$("ff").onchange=function(){var f=this.files[0];if(!f)return;var r=new FileReader();r.onload=function(){var im=new Image();im.onload=function(){var k=Math.min(1,360/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=im.width*k;c.height=im.height*k;c.getContext("2d").drawImage(im,0,0,c.width,c.height);cur=c.toDataURL("image/jpeg",.72);imgUI()};im.src=r.result};r.readAsDataURL(f)};
+$("sv").onclick=async function(){var name=$("fn").value.trim();if(!name){$("fn").focus();return}
+var offers=$("fo").value.split("\n").map(function(l){var a=l.split("|").map(function(x){return x.trim()});return{r:a[0],p:parseFloat(a[1]),u:a[2]||""}}).filter(function(o){return o.r&&!isNaN(o.p)});if(!offers.length){$("fo").focus();return}
+var d={name:name,cat:$("fc").value,rating:Math.min(5,Math.max(1,parseFloat($("fr").value)||4)),verdict:$("fv").value.trim(),sizing:$("fs").value.trim(),asin:$("fa").value.trim().toUpperCase()||null,offers:offers,img:cur||null,updated_at:new Date().toISOString()};
+var b=issues(d);d.live=!b.length;
+var r=editId?await sb.from("products").update(d).eq("id",editId).select().single():await sb.from("products").insert(d).select().single();
+if(r.error)return flash(r.error.message);
+var note="",h=new Date().getHours();
+if(!sh)note=" Not clocked in, so this edit isn't paid.";
+else if(h<cfg.from||h>=cfg.to)note=" Outside working hours, so it doesn't count toward the minimum.";
+else{var e=await sb.from("edits").upsert({shift_id:sh.id,product_id:r.data.id},{onConflict:"shift_id,product_id",ignoreDuplicates:true});if(e.error)note=" "+e.error.message}
+$("dlg").close();await loadP();await loadShift();rows();clock();
+flash((b.length?"Saved as a draft: "+b.join("; ")+".":"Saved and live on the storefront.")+note)};
+
+/* ---- team pay ---- */
+$("tP").onclick=function(){view("p")};$("tT").onclick=function(){view("t")};
+function view(v){$("vp").hidden=v!=="p";$("vt").hidden=v!=="t";$("tP").setAttribute("aria-pressed",v==="p");$("tT").setAttribute("aria-pressed",v==="t");if(v==="t")teamV()}
+function fld(l,k,x){return"<label>"+l+'<input data-k="'+k+'" '+(x||'type="number" step="any"')+' value="'+esc(cfg[k])+'"></label>'}
+async function teamV(){var adm=me.role==="admin",r=await sb.rpc("pay_summary");if(r.error){$("vt").innerHTML='<p class="empty">'+esc(r.error.message)+"</p>";return}
+var h='<h2 style="font-size:2rem;margin-top:14px">'+(adm?"Team pay":"Your pay")+'</h2><p class="size">Hourly time, plus a set amount for each product edited in a shift, plus a bonus when sales per hour reach the target and no shift missed the minimum. Sales credit comes from Amazon earnings, split between the people who worked on each product.</p><div class="tbl"><table><thead><tr>'+["Member","Rate / hr","Hours","Products","Hourly pay","Edit pay","Sales credit","Sales / hr","Bonus","Total"].concat(adm?["Account"]:[]).map(function(x){return"<th>"+x+"</th>"}).join("")+"</tr></thead><tbody>"+
+(r.data||[]).map(function(x){var hr=+x.hours,sa=+x.sales,sph=hr>0?sa/hr:0,bo=(+x.shifts_missed===0&&hr>0&&sph>=cfg.target)?sa*cfg.bonus/100:0,hp=hr*x.rate,ep=x.products*cfg.edit;
+return"<tr><td><b>"+esc(x.name)+"</b>"+(+x.shifts_missed?"<br><small>Missed minimum "+x.shifts_missed+"x</small>":"")+"</td><td>"+(adm?'<input type="number" min="0" step="0.5" value="'+x.rate+'" data-r="'+x.user_id+'" aria-label="Hourly rate for '+esc(x.name)+'" style="width:80px">':money(x.rate))+"</td><td>"+hrs(hr)+"</td><td>"+x.products+"</td><td>"+money(hp)+"</td><td>"+money(ep)+"</td><td>"+money(sa)+"</td><td>"+money(sph)+"</td><td>"+money(bo)+"</td><td><b>"+money(hp+ep+bo)+"</b></td>"+(adm?'<td style="white-space:nowrap"><button class="btn alt sm" data-rp="'+x.user_id+'">Reset password</button> <button class="btn alt sm" data-ds="'+x.user_id+'">Disable</button></td>':"")+"</tr>"}).join("")+"</tbody></table></div>";
+if(adm)h+='<h3 style="margin-top:24px">Add a team member</h3><div class="tools"><input id="ne" type="email" placeholder="Email" aria-label="Email"><input id="nn" placeholder="Name" aria-label="Name"><select id="nro" aria-label="Role"><option value="editor">Editor</option><option value="admin">Admin</option></select><input id="nrt" type="number" min="0" step="0.5" placeholder="Rate / hr" aria-label="Rate per hour" style="width:110px"><button class="btn" id="nadd">Create account</button></div><div class="note" id="cred" hidden></div><h3 style="margin-top:24px">Import Amazon earnings</h3><p class="size">Download the earnings report from Associates Central and load it here, one month at a time. It needs an ASIN column and a commission column (named like "Ad Fees", "Earnings" or "Commission"). Re-importing a month replaces it.</p><div class="tools"><input id="sm" type="month" aria-label="Report month"><input id="sf" type="file" accept=".csv,.tsv,.txt" aria-label="Report file"><button class="btn" id="imp">Import</button></div><h3 style="margin-top:22px">House rules</h3><div class="cfg">'+fld("Pay per product edited","edit")+fld("Sales per hour target","target")+fld("Bonus % of sales","bonus")+fld("Minimum products per shift","minP")+fld("Work starts (hour, 0-23)","from")+fld("Work ends (hour, 0-23)","to")+fld("Allowed short-link domains","short",'type="text"')+"</div>";
+$("vt").innerHTML=h}
+function cells(l,d){var o=[],c="",q=false;for(var i=0;i<l.length;i++){var ch=l[i];if(ch==='"'){if(q&&l[i+1]==='"'){c+='"';i++}else q=!q}else if(ch===d&&!q){o.push(c);c=""}else c+=ch}o.push(c);return o}
+$("vt").onclick=async function(e){var t=e.target,rp=t.getAttribute("data-rp"),ds=t.getAttribute("data-ds");
+if(t.id==="nadd")return addMember();if(rp)return resetPw(rp);if(ds)return disable(ds);if(t.id!=="imp")return;var m=$("sm").value,f=$("sf").files[0];if(!m||!f)return flash("Pick a month and a report file.");
+var txt=await f.text(),L=txt.split(/\r?\n/).filter(function(x){return x.trim()}),hi=L.findIndex(function(l){return/asin/i.test(l)});if(hi<0)return flash("No ASIN column found in that file.");
+var d=L[hi].indexOf("\t")>-1?"\t":",",H=cells(L[hi],d),ai=H.findIndex(function(x){return/asin/i.test(x)}),ei=H.findIndex(function(x){return/ad fees|earnings|commission/i.test(x)});if(ei<0)return flash("No commission column found. Expected a header like Ad Fees, Earnings or Commission.");
+var out=[];L.slice(hi+1).forEach(function(l){var c=cells(l,d),a=(c[ai]||"").trim().toUpperCase(),v=parseFloat((c[ei]||"").replace(/[^0-9.\-]/g,""));if(a&&!isNaN(v))out.push({asin:a,earnings:v,period:m+"-01"})});
+if(!out.length)return flash("No usable rows found.");
+var x=await sb.from("sales").delete().eq("period",m+"-01");if(x.error)return flash(x.error.message);
+for(var i=0;i<out.length;i+=500){var y=await sb.from("sales").insert(out.slice(i,i+500));if(y.error)return flash(y.error.message)}
+var known={};P.forEach(function(p){if(p.asin)known[p.asin]=1});var miss=out.filter(function(o){return!known[o.asin]}).length;
+flash("Imported "+out.length+" rows for "+m+"."+(miss?" "+miss+" have an ASIN that matches no product yet, so nobody is credited for them.":""));teamV()};
+$("vt").onchange=async function(e){var t=e.target,k=t.getAttribute("data-k"),r=t.getAttribute("data-r");
+if(r){var x=await sb.from("pay_rates").update({rate:parseFloat(t.value)||0}).eq("user_id",r);if(x.error)flash(x.error.message);teamV()}
+if(k){cfg[k]=k==="short"?t.value:parseFloat(t.value)||0;var y=await sb.from("settings").update({cfg:cfg}).eq("id",1);if(y.error)return flash(y.error.message);
+for(var i=0;i<P.length;i++){var live=!issues(P[i]).length;if(live!==P[i].live)await sb.from("products").update({live:live}).eq("id",P[i].id)}
+await loadP();rows();teamV()}};
+async function call(b){var r=await sb.functions.invoke("admin-users",{body:b});if(r.error){var m=r.error.message;try{var j=await r.error.context.json();m=j.error||m}catch(e){}flash(m);return null}return r.data}
+function showCred(t){var c=$("cred");if(c){c.textContent=t;c.hidden=false}}
+async function addMember(){var b={action:"create",email:$("ne").value.trim(),name:$("nn").value.trim(),role:$("nro").value,rate:parseFloat($("nrt").value)||15};if(!b.email)return flash("Enter an email.");var d=await call(b);if(!d)return;await teamV();showCred("Created "+d.email+". Temporary password: "+d.password+" (shown once. Give it to them directly.)")}
+async function resetPw(id){if(!confirm("Set a new temporary password for this person?"))return;var d=await call({action:"reset",user_id:id});if(d)showCred("New temporary password: "+d.password+" (shown once.)")}
+async function disable(id){if(!confirm("Disable this account? They will no longer be able to sign in."))return;var d=await call({action:"disable",user_id:id});if(d)flash("Account disabled.")}
+$("pwd").onclick=async function(){var p=prompt("New password (at least 8 characters)");if(!p)return;if(p.length<8)return flash("Use at least 8 characters.");var r=await sb.auth.updateUser({password:p});flash(r.error?r.error.message:"Password changed.")};
+sb.auth.getSession().then(function(r){r.data.session?start():showLogin()});
 </script>
 </body>
 </html>
